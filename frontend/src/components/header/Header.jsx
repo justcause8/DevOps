@@ -47,7 +47,7 @@ function Header() {
                         <div className='desktop-only'>
                             <span>Начните</span>
                             <span>создавать</span>
-                            <span>свои анкеты</span>
+                            <span>свои анкеты!</span>
                             
                         </div>
                         <div className='mobile-only'>

@@ -70,14 +70,14 @@ pipeline {
             }
         }
 
-        stage('Run Database Migrations') {
-            steps {
-                script {
-                    echo 'Запускаем миграции базы данных...'
-                    bat "docker run --rm ${BACKEND_IMAGE}:latest dotnet ef database update"
-                }
-            }
-        }
+        // stage('Run Database Migrations') {
+        //     steps {
+        //         script {
+        //             echo 'Запускаем миграции базы данных...'
+        //             bat "docker run --rm ${BACKEND_IMAGE}:latest dotnet ef database update"
+        //         }
+        //     }
+        // }
 
         stage('Deploy') {
             when { expression { env.GIT_BRANCH == 'origin/main' } }

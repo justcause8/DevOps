@@ -56,11 +56,11 @@ pipeline {
                 script {
                     def branchName = env.GIT_BRANCH.replaceAll('origin/', '')
 
-                    // // Проверка изменений в фронтенде и бэкенде
-                    // if (env.CHANGED_BACKEND?.toBoolean() == true) {
-                    //     echo 'Тестируем бэкенд в контейнере...'
-                    //     bat "docker run --rm ${BACKEND_IMAGE}:${branchName} dotnet test"
-                    // }
+                    // Проверка изменений в бэкенде
+                    if (env.CHANGED_BACKEND?.toBoolean() == true) {
+                        echo 'Тестируем бэкенд в контейнере...'
+                        bat "docker run --rm ${BACKEND_IMAGE}:${branchName} dotnet test"
+                    }
 
                     // Пропускаем тесты, если нет изменений
                     if (env.CHANGED_FRONTEND?.toBoolean() == false && env.CHANGED_BACKEND?.toBoolean() == false) {

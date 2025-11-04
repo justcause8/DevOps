@@ -39,8 +39,8 @@ pipeline {
 
                     if (runBackend) {
                         dir(env.BACKEND_DIR) {
-                            echo 'Запускаем unit-тесты бэкенда...'
-                            bat 'dotnet test --no-build --verbosity normal'
+                            echo 'Запускаем тесты бэкенда...'
+                            bat 'dotnet test'
                         }
                     }
 

@@ -18,7 +18,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile.backend
-    image: questionnaire-backend
+    image: questionnaire-backend:latest
     container_name: questionnaire-backend
     ports:
       - "5000:5000"
@@ -34,7 +34,7 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile.frontend
-    image: questionnaire-frontend
+    image: questionnaire-frontend:latest
     container_name: questionnaire-frontend
     ports:
       - "3000:80"

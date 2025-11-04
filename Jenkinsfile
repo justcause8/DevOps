@@ -8,7 +8,7 @@ pipeline {
         DOCKERHUB_USER = 'justcause'
         FRONTEND_IMAGE = "${DOCKERHUB_USER}/questionnaire-frontend"
         BACKEND_IMAGE  = "${DOCKERHUB_USER}/questionnaire-backend"
-        DEPLOY_PATH = "D:\ПОЛИТЕХ\4 курс\DevOps"
+        DEPLOY_PATH = 'D:\\ПОЛИТЕХ\\4 курс\\DevOps'
     }
 
     stages {

@@ -8,7 +8,7 @@ pipeline {
         DOCKERHUB_USER = 'justcause'
         FRONTEND_IMAGE = "${DOCKERHUB_USER}/questionnaire-frontend"
         BACKEND_IMAGE  = "${DOCKERHUB_USER}/questionnaire-backend"
-        DEPLOY_PATH = "D:\\ПОЛИТЕХ\\4 курс\\DevOps"
+        DEPLOY_PATH = "D:\ПОЛИТЕХ\4 курс\DevOps"
     }
 
     stages {
@@ -31,6 +31,34 @@ pipeline {
             }
         }
 
+        stage('Run Tests') {
+            steps {
+                script {
+                    boolean runFrontend = env.CHANGED_FRONTEND.toBoolean()
+                    boolean runBackend  = env.CHANGED_BACKEND.toBoolean()
+
+                    if (runBackend) {
+                        dir(env.BACKEND_DIR) {
+                            echo 'Запускаем unit-тесты бэкенда...'
+                            bat 'dotnet test --no-build --verbosity normal'
+                        }
+                    }
+
+                    if (runFrontend) {
+                        dir(env.FRONTEND_DIR) {
+                            echo 'Запускаем тесты фронтенда'
+                            // Пример: если используются Jest/Jest + CI
+                            // bat 'npm test -- --watchAll=false'
+                        }
+                    }
+
+                    if (!runFrontend && !runBackend) {
+                        echo 'Нет изменений — тесты пропущены.'
+                    }
+                }
+            }
+        }
+
         stage('Build and Push Docker Images') {
             steps {
                 script {
@@ -46,36 +74,6 @@ pipeline {
                             docker build -f "${BACKEND_DIR}/Dockerfile.backend" -t %BACKEND_IMAGE%:latest ${BACKEND_DIR}
                             docker push %BACKEND_IMAGE%:latest
                         """
-                    }
-                }
-            }
-        }
-
-        stage('Run Tests in Containers') {
-            steps {
-                script {
-                    def branchTag = env.GIT_BRANCH.replaceAll('origin/', '')
-
-                    // Проверка изменений в бэкенде
-                    if (env.CHANGED_BACKEND?.toBoolean()) {
-                        echo "Тестируем бэкенд в контейнере..."
-                        withCredentials([usernamePassword(
-                            credentialsId: DOCKERHUB_CREDENTIALS,
-                            usernameVariable: 'DOCKER_USER',
-                            passwordVariable: 'DOCKER_TOKEN'
-                        )]) {
-                            bat """
-                                echo %DOCKER_TOKEN% | docker login -u %DOCKER_USER% --password-stdin
-                                docker build -f "${BACKEND_DIR}/Dockerfile.backend" -t %BACKEND_IMAGE%:${branchTag} ${BACKEND_DIR}
-                                docker push %BACKEND_IMAGE%:${branchTag}
-                                docker run --rm %BACKEND_IMAGE%:${branchTag} dotnet test
-                            """
-                        }
-                    }
-
-                    // Пропускаем тесты, если нет изменений
-                    if (!env.CHANGED_FRONTEND?.toBoolean() && !env.CHANGED_BACKEND?.toBoolean()) {
-                        echo 'Нет изменений в frontend/ или backend/ — тесты пропущены.'
                     }
                 }
             }

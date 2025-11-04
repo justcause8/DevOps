@@ -48,6 +48,7 @@ function Header() {
                             <span>Начните</span>
                             <span>создавать</span>
                             <span>свои анкеты</span>
+                            
                         </div>
                         <div className='mobile-only'>
                             <span>Начните создавать</span>

@@ -19,21 +19,21 @@ pipeline {
             }
         }
 
-        stage('Build Backend for Tests') {
-            steps {
-                dir(BACKEND_DIR) {
-                    bat "docker build -t backend-test -f Dockerfile.backend ."
-                }
-            }
-        }
+        // stage('Build Backend for Tests') {
+        //     steps {
+        //         dir(BACKEND_DIR) {
+        //             bat "docker build -t backend-test -f Dockerfile.backend ."
+        //         }
+        //     }
+        // }
 
-        stage('Run Backend Tests') {
-            steps {
-                dir(BACKEND_DIR) {
-                    bat 'docker run --rm backend-test dotnet test questionnaire/questionnaire.csproj'
-                }
-            }
-        }
+        // stage('Run Backend Tests') {
+        //     steps {
+        //         dir(BACKEND_DIR) {
+        //             bat 'docker run --rm backend-test dotnet test questionnaire/questionnaire.csproj'
+        //         }
+        //     }
+        // }
 
         stage('Build and Push Docker Images') {
             steps {
@@ -50,6 +50,28 @@ pipeline {
                             docker build -f "${BACKEND_DIR}/Dockerfile.backend" -t %BACKEND_IMAGE%:latest ${BACKEND_DIR}
                             docker push %BACKEND_IMAGE%:latest
                         """
+                    }
+                }
+            }
+        }
+
+        stage('Run Tests in Containers') {
+            steps {
+                script {
+                    def branchName = env.GIT_BRANCH.replaceAll('origin/', '')
+
+                    // if (env.CHANGED_FRONTEND.toBoolean()) {
+                    //     echo 'Тестируем фронтенд в контейнере...'
+                    //     bat "docker run --rm ${FRONTEND_IMAGE}:${branchName} npm test -- --watchAll=false"
+                    // }
+
+                    if (env.CHANGED_BACKEND.toBoolean()) {
+                        echo 'Тестируем бэкенд в контейнере...'
+                        bat "docker run --rm ${BACKEND_IMAGE}:${branchName} dotnet test"
+                    }
+
+                    if (!env.CHANGED_FRONTEND.toBoolean() && !env.CHANGED_BACKEND.toBoolean()) {
+                        echo 'Нет изменений в frontend/ или backend/ — тесты пропущены.'
                     }
                 }
             }

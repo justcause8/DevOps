@@ -78,15 +78,6 @@ pipeline {
             }
         }
 
-        // stage('Run Database Migrations') {
-        //     steps {
-        //         script {
-        //             echo 'Запускаем миграции базы данных...'
-        //             bat "docker run --rm ${BACKEND_IMAGE}:latest dotnet ef database update"
-        //         }
-        //     }
-        // }
-
         stage('Deploy') {
             when { expression { env.GIT_BRANCH == 'origin/main' } }
             steps {
@@ -94,8 +85,8 @@ pipeline {
                     if not exist "${DEPLOY_PATH}" mkdir "${DEPLOY_PATH}"
                     copy /Y "${WORKSPACE}\\docker-compose.yml" "${DEPLOY_PATH}\\docker-compose.yml"
                     cd /d ${DEPLOY_PATH}
-                    docker stop devops-backend-1 devops-frontend-1 2>nul || echo "No old containers to stop"
-                    docker rm devops-backend-1 devops-frontend-1 2>nul || echo "No old containers to remove"
+                    docker stop questionnaire-backend questionnaire-frontend"
+                    docker rm questionnaire-backend questionnaire-frontend"
                     docker-compose devops down --remove-orphans
                     docker-compose pull
                     docker-compose up -d
@@ -118,6 +109,14 @@ pipeline {
 
 
 
+        // stage('Run Database Migrations') {
+        //     steps {
+        //         script {
+        //             echo 'Запускаем миграции базы данных...'
+        //             bat "docker run --rm ${BACKEND_IMAGE}:latest dotnet ef database update"
+        //         }
+        //     }
+        // }
 
 
 // pipeline {

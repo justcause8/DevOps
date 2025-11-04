@@ -50,7 +50,7 @@ const Navbar = () => {
                     <div className="nav-row">
                         <img src={logo} alt="Project img" className="project__img" />
                         <NavLink to="/HEADER" className="logo">
-                            Конструктор<span>анкет</span>
+                            Конструктор<span>анкет!!!</span>
                         </NavLink>
 
                         <button className="hamburger" onClick={toggleMenu}>

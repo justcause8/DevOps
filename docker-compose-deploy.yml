@@ -15,10 +15,7 @@ services:
       - app-network
 
   backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile.backend
-    image: questionnaire-backend
+    image: justcause/questionnaire-backend:latest
     container_name: questionnaire-backend
     ports:
       - "5000:5000"
@@ -31,10 +28,7 @@ services:
       - app-network
 
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile.frontend
-    image: questionnaire-frontend
+    image: justcause/questionnaire-frontend:latest
     container_name: questionnaire-frontend
     ports:
       - "3000:80"

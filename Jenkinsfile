@@ -21,7 +21,6 @@ pipeline {
                     def changes = bat(script: 'git diff --name-only HEAD~1 HEAD', returnStdout: true).trim()
                     echo "Изменённые файлы:\n${changes}"
 
-                    // Инициализируем переменные
                     env.CHANGED_FRONTEND = changes.contains("${env.FRONTEND_DIR}/").toString()
                     env.CHANGED_BACKEND  = changes.contains("${env.BACKEND_DIR}/").toString()
 

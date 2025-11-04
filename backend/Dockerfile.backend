@@ -1,0 +1,15 @@
+# Stage 1 — сборка проекта
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+
+WORKDIR /src
+COPY questionnaire/questionnaire.csproj questionnaire/
+RUN dotnet restore questionnaire/questionnaire.csproj
+COPY . .
+RUN dotnet publish questionnaire/questionnaire.csproj -c Release -o /app/publish
+
+# Stage 2 — запуск приложения
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+WORKDIR /app
+COPY --from=build /app/publish .
+EXPOSE 5000
+ENTRYPOINT ["dotnet", "questionnaire.dll"]

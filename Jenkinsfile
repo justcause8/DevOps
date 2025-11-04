@@ -83,7 +83,7 @@ pipeline {
             steps {
                 bat """
                     if not exist "${DEPLOY_PATH}" mkdir "${DEPLOY_PATH}"
-                    copy /Y "${WORKSPACE}\\docker-compose.yml" "${DEPLOY_PATH}\\docker-compose.yml"
+                    copy /Y "${WORKSPACE}\\docker-compose-deploy.yml" "${DEPLOY_PATH}\\docker-compose.yml"
                     cd /d ${DEPLOY_PATH}
                     docker-compose -p devops down --remove-orphans
                     docker-compose -p devops pull

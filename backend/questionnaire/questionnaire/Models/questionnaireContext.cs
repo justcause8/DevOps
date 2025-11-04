@@ -50,7 +50,7 @@ public partial class QuestionnaireContext : DbContext
             optionsBuilder.UseSqlServer("Server=questionnaire-db,1433;Database=questionnaire_db;User Id=sa;Password=Admin123!;TrustServerCertificate=True;Encrypt=False;");
         }
     }
-
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<AccessLevel>(entity =>

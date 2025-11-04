@@ -56,7 +56,7 @@ pipeline {
         }
 
         stage('Deploy') {
-            when { expression { env.GIT_BRANCH == 'origin/master' } }
+            when { expression { env.GIT_BRANCH == 'origin/main' } }
             steps {
                 bat """
                     if not exist "${DEPLOY_PATH}" mkdir "${DEPLOY_PATH}"

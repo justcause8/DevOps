@@ -71,10 +71,11 @@ pipeline {
         }
 
         stage('Run Database Migrations') {
-        steps {
-            script {
-                echo 'Запускаем миграции базы данных...'
-                bat "docker run --rm ${BACKEND_IMAGE}:latest dotnet ef database update"
+            steps {
+                script {
+                    echo 'Запускаем миграции базы данных...'
+                    bat "docker run --rm ${BACKEND_IMAGE}:latest dotnet ef database update"
+                }
             }
         }
 

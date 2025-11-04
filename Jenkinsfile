@@ -54,16 +54,27 @@ pipeline {
         stage('Run Tests in Containers') {
             steps {
                 script {
-                    def branchName = env.GIT_BRANCH.replaceAll('origin/', '')
+                    def branchTag = env.GIT_BRANCH.replaceAll('origin/', '')
 
                     // Проверка изменений в бэкенде
-                    if (env.CHANGED_BACKEND?.toBoolean() == true) {
-                        echo 'Тестируем бэкенд в контейнере...'
-                        bat "docker run --rm ${BACKEND_IMAGE}:${branchName} dotnet test"
+                    if (env.CHANGED_BACKEND?.toBoolean()) {
+                        echo "Тестируем бэкенд в контейнере..."
+                        withCredentials([usernamePassword(
+                            credentialsId: DOCKERHUB_CREDENTIALS,
+                            usernameVariable: 'DOCKER_USER',
+                            passwordVariable: 'DOCKER_TOKEN'
+                        )]) {
+                            bat """
+                                echo %DOCKER_TOKEN% | docker login -u %DOCKER_USER% --password-stdin
+                                docker build -f "${BACKEND_DIR}/Dockerfile.backend" -t %BACKEND_IMAGE%:${branchTag} ${BACKEND_DIR}
+                                docker push %BACKEND_IMAGE%:${branchTag}
+                                docker run --rm %BACKEND_IMAGE%:${branchTag} dotnet test
+                            """
+                        }
                     }
 
                     // Пропускаем тесты, если нет изменений
-                    if (env.CHANGED_FRONTEND?.toBoolean() == false && env.CHANGED_BACKEND?.toBoolean() == false) {
+                    if (!env.CHANGED_FRONTEND?.toBoolean() && !env.CHANGED_BACKEND?.toBoolean()) {
                         echo 'Нет изменений в frontend/ или backend/ — тесты пропущены.'
                     }
                 }

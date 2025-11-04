@@ -31,10 +31,6 @@ function AnswersPage() {
                 const response = await axios.get(`${apiBaseUrl}/questionnaire/access/${id}`, {
                     headers: { Authorization: `Bearer ${localStorage.getItem('access_token')}` },
                 });
-                
-                // const response = await axios.get(`https://localhost:7109/questionnaire/access/${id}`, {
-                //     headers: { Authorization: `Bearer ${localStorage.getItem('access_token')}` },
-                // });
 
                 // const response = await axios.get(`http://localhost:5000/questionnaire/access/${id}`, {
                 //     headers: { Authorization: `Bearer ${localStorage.getItem('access_token')}` },

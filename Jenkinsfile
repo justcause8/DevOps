@@ -8,7 +8,7 @@ pipeline {
         DOCKERHUB_USER = 'justcause'
         FRONTEND_IMAGE = "${DOCKERHUB_USER}/questionnaire-frontend"
         BACKEND_IMAGE  = "${DOCKERHUB_USER}/questionnaire-backend"
-        DEPLOY_PATH = 'D:\\ПОЛИТЕХ\\4 курс\\DevOps'
+        DEPLOY_PATH = 'D:/ПОЛИТЕХ/4 курс/DevOps'
     }
 
     stages {
@@ -85,11 +85,9 @@ pipeline {
                     if not exist "${DEPLOY_PATH}" mkdir "${DEPLOY_PATH}"
                     copy /Y "${WORKSPACE}\\docker-compose.yml" "${DEPLOY_PATH}\\docker-compose.yml"
                     cd /d ${DEPLOY_PATH}
-                    docker stop questionnaire-backend questionnaire-frontend"
-                    docker rm questionnaire-backend questionnaire-frontend"
-                    docker-compose devops down --remove-orphans
-                    docker-compose pull
-                    docker-compose up -d
+                    docker-compose -p devops down --remove-orphans
+                    docker-compose -p devops pull
+                    docker-compose -p devops up -d --force-recreate
                 """
                 echo "Приложение развернуто локально:"
                 echo "  Фронтенд: http://localhost:3000"

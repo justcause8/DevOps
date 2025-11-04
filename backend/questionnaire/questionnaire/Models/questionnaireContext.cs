@@ -42,6 +42,7 @@ public partial class QuestionnaireContext : DbContext
         => optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB; Database=questionnaire; Trusted_Connection=True;TrustServerCertificate=true;Encrypt=false;");
     */
 
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         if (!optionsBuilder.IsConfigured)

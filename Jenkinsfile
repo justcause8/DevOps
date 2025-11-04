@@ -60,11 +60,6 @@ pipeline {
                 script {
                     def branchName = env.GIT_BRANCH.replaceAll('origin/', '')
 
-                    // if (env.CHANGED_FRONTEND.toBoolean()) {
-                    //     echo 'Тестируем фронтенд в контейнере...'
-                    //     bat "docker run --rm ${FRONTEND_IMAGE}:${branchName} npm test -- --watchAll=false"
-                    // }
-
                     if (env.CHANGED_BACKEND.toBoolean()) {
                         echo 'Тестируем бэкенд в контейнере...'
                         bat "docker run --rm ${BACKEND_IMAGE}:${branchName} dotnet test"

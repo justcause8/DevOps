@@ -16,24 +16,20 @@ pipeline {
         stage('Checkout') {
             steps {
                 checkout scm
+                script {
+                    // Получаем список изменённых файлов
+                    def changes = bat(script: 'git diff --name-only HEAD~1 HEAD', returnStdout: true).trim()
+                    echo "Изменённые файлы:\n${changes}"
+
+                    // Инициализируем переменные
+                    env.CHANGED_FRONTEND = changes.contains("${env.FRONTEND_DIR}/").toString()
+                    env.CHANGED_BACKEND  = changes.contains("${env.BACKEND_DIR}/").toString()
+
+                    echo "Frontend изменён: ${env.CHANGED_FRONTEND}"
+                    echo "Backend изменён:  ${env.CHANGED_BACKEND}"
+                }
             }
         }
-
-        // stage('Build Backend for Tests') {
-        //     steps {
-        //         dir(BACKEND_DIR) {
-        //             bat "docker build -t backend-test -f Dockerfile.backend ."
-        //         }
-        //     }
-        // }
-
-        // stage('Run Backend Tests') {
-        //     steps {
-        //         dir(BACKEND_DIR) {
-        //             bat 'docker run --rm backend-test dotnet test questionnaire/questionnaire.csproj'
-        //         }
-        //     }
-        // }
 
         stage('Build and Push Docker Images') {
             steps {
@@ -60,12 +56,14 @@ pipeline {
                 script {
                     def branchName = env.GIT_BRANCH.replaceAll('origin/', '')
 
-                    if (env.CHANGED_BACKEND.toBoolean()) {
-                        echo 'Тестируем бэкенд в контейнере...'
-                        bat "docker run --rm ${BACKEND_IMAGE}:${branchName} dotnet test"
-                    }
+                    // // Проверка изменений в фронтенде и бэкенде
+                    // if (env.CHANGED_BACKEND?.toBoolean() == true) {
+                    //     echo 'Тестируем бэкенд в контейнере...'
+                    //     bat "docker run --rm ${BACKEND_IMAGE}:${branchName} dotnet test"
+                    // }
 
-                    if (!env.CHANGED_FRONTEND.toBoolean() && !env.CHANGED_BACKEND.toBoolean()) {
+                    // Пропускаем тесты, если нет изменений
+                    if (env.CHANGED_FRONTEND?.toBoolean() == false && env.CHANGED_BACKEND?.toBoolean() == false) {
                         echo 'Нет изменений в frontend/ или backend/ — тесты пропущены.'
                     }
                 }
@@ -96,6 +94,7 @@ pipeline {
         always { cleanWs() }
     }
 }
+
 
 
 

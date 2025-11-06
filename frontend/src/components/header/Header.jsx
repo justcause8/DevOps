@@ -55,7 +55,7 @@ function Header() {
                             <span>свои анкеты</span>
                             <span>прямо сейчас</span>
                         </div>
-                    </h1>
+                    </h1> 
                     <button onClick={handleCreateClick} className="btn-create">
                         Создать анкету
                     </button>

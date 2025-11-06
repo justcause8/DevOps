@@ -45,10 +45,10 @@ function Header() {
                 <div className="header__wrapper">
                     <h1 className="header__title span">
                         <div className='desktop-only'>
-                            <span>!Начните</span>
+                            <span>Начните</span>
                             <span>создавать</span>
                             <span>свои анкеты</span>
-                            <span>прямо сейчас!!!!</span>
+                            <span>прямо сейчас!</span>
                         </div>
                         <div className='mobile-only'>
                             <span>Начните создавать</span>

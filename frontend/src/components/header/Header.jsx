@@ -48,7 +48,7 @@ function Header() {
                             <span>Начните</span>
                             <span>создавать</span>
                             <span>свои анкеты</span>
-                            <span>прямо сейчас!</span>
+                            <span>прямо сейчас!!</span>
                         </div>
                         <div className='mobile-only'>
                             <span>Начните создавать</span>

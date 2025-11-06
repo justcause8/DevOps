@@ -53,7 +53,7 @@ function Header() {
                         <div className='mobile-only'>
                             <span>Начните создавать</span>
                             <span>свои анкеты</span>
-                            <span>прямо сейчас</span>
+                            <span>прямо сейчас!</span>
                         </div>
                     </h1> 
                     <button onClick={handleCreateClick} className="btn-create">
